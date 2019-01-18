@@ -166,44 +166,33 @@ function main(){
                     
             -if oldStack === null --> return new Stack 
         */
-       
-      
-        if(!stack.top) {
+       if(!stack.top) {
             return "The Stack is Empty!";
         }
         let newStack = new Stack(); 
-
         while(stack.top) {
             console.log('loop started');
-           let currentValue = stack.peek();
+           let currentValue = stack.peek();// 4321, => ---- 
             if(!newStack.top) { // <--- newStack is empty
                 console.log('newstack is empty');
-                newStack.push(stack.pop()); // <---- newStack =6
+                newStack.push(stack.pop().data); // <---- old= 4321, new 5
             }
-
             else if(currentValue < newStack.peek()) { // <---- 6 < 9 newStack = 9
                 console.log('current < newstack top');
-                newStack.push(stack.pop()); // <---- newStack = 6,9
+                newStack.push(stack.pop().data); // <---- newStack = 6,9
             }
             else if(currentValue > newStack.peek()) { // <---- 6 > 3 
-                console.log('current > newstack top');
-                stack.push(newStack.pop()); // <---- newStack = ?
-                    if(!newStack.top) {
-                        console.log('1 newstack is now empty');
-                        newStack.push(stack.pop()); // <--- 6 is newStack
-                    }
-                    else if(currentValue < newStack.peek()) { // <---current value = 6, newStack = 9
-                        console.log('1 stack nested < new');
-                        newStack.push(stack.pop());
-                    }
-                    else if(currentValue > newStack.peek()){
-                        console.log('1 stack nested > new');
-                        stack.push(newStack.pop());
-                    }
+                console.log('current > newstack top');///  o=2345 c=2     n=1
+                stack.pop();
+                while (newStack.top && currentValue > newStack.peek() ) {
+                         stack.push(newStack.pop().data);
+                     }
+            newStack.push(currentValue);
             }
+            stack.display();
+            newStack.display();
             console.log('end, relooping here');
         }
-
         console.log('loop ended');
         
         return newStack;
@@ -230,11 +219,11 @@ function main(){
     // console.log(parentheses('()()('));
     // console.log(parentheses('(()())'));
     // console.log(parentheses('3+2)+4(1+2)+3)'));
-    // myStack.push(5);
-    // myStack.push(9);
-    // myStack.push(1);
+    myStack.push(1);
+    myStack.push(5);
+    myStack.push(3);
+    myStack.push(2);
     myStack.push(4);
-    myStack.push(9);
     myStack.display();
     const newNew = sort(myStack);
     newNew.display();
