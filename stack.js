@@ -39,7 +39,7 @@ class Stack {
         let output = 'Top of Stack:';
         let currentStack = this.top; 
         if(this.top===null) {
-            // console.log("Empty Stack!");
+            console.log("Empty Stack!");
             return;
         }
         while(currentStack !==null) {
@@ -56,7 +56,7 @@ class Stack {
             // console.log("Empty Stack- no top!");
             return null;
         }
-        console.log(`Top of Stack:${this.top.data.toString()}`);
+       // console.log(`Top of Stack:${this.top.data.toString()}`);
         return this.top.data;
     }
     
@@ -171,32 +171,23 @@ function main(){
         }
         let newStack = new Stack(); 
         while(stack.top) {
-            console.log('loop started');
-           let currentValue = stack.peek();// 4321, => ---- 
+            let currentValue = stack.peek();// 4321, => ---- 
             if(!newStack.top) { // <--- newStack is empty
-                console.log('newstack is empty');
-                newStack.push(stack.pop().data); // <---- old= 4321, new 5
+                 newStack.push(stack.pop().data); // <---- old= 4321, new 5
             }
             else if(currentValue < newStack.peek()) { // <---- 6 < 9 newStack = 9
-                console.log('current < newstack top');
-                newStack.push(stack.pop().data); // <---- newStack = 6,9
+                 newStack.push(stack.pop().data); // <---- newStack = 6,9
             }
             else if(currentValue > newStack.peek()) { // <---- 6 > 3 
-                console.log('current > newstack top');///  o=2345 c=2     n=1
                 stack.pop();
                 while (newStack.top && currentValue > newStack.peek() ) {
                          stack.push(newStack.pop().data);
-                     }
+                }
             newStack.push(currentValue);
             }
-            stack.display();
-            newStack.display();
-            console.log('end, relooping here');
         }
-        console.log('loop ended');
-        
-        return newStack;
-}
+    return newStack;
+    }
     
     let myStack = new Stack();
     // myStack.peek();
@@ -204,7 +195,7 @@ function main(){
     // myStack.push('Spock');
     // myStack.push('McCoy');
     // myStack.push('Scotty');
-    myStack.display();
+    //myStack.display();
     //let test = myStack.pop();
     //console.log(test);
     // myStack.display();
@@ -224,6 +215,13 @@ function main(){
     myStack.push(3);
     myStack.push(2);
     myStack.push(4);
+    myStack.push(41);
+    myStack.push(14);
+    myStack.push(15);
+    myStack.push(52);
+    myStack.push(40);
+    myStack.push(99);
+    myStack.push(8);
     myStack.display();
     const newNew = sort(myStack);
     newNew.display();
