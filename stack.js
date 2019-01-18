@@ -7,20 +7,24 @@ class _Node {
 }
 
 class Stack {
-    constructor(){
+    constructor() {
         this.top = null;
     }
+
     pop() {
         if(this.top === null) {
             return;            
         }
         const oldTop = this.top;
         this.top = this.top.next; 
-        return oldTop.data;                        
+        return oldTop;                        
+    }
+    reset() {
+        this.top = null;
     }
 
-    push(data){
-        if (this.top === null){
+    push(data) {
+        if (this.top === null) {
          this.top = new _Node(data, null);
             return this.top;
         }
@@ -28,30 +32,30 @@ class Stack {
         this.top = new _Node(data, this.top);
     }
 
-    display(){
+    display() {
         // for debugging aid;
         let output = 'Top of Stack:';
         let currentStack = this.top; 
-        if(this.top===null){
-            console.log("Empty Stack!");
+        if(this.top===null) {
+            // console.log("Empty Stack!");
             return;
         }
-    while(currentStack !==null){
-        output += currentStack.data.toString() + ', ';//extra for readability
-        currentStack = currentStack.next;
+        while(currentStack !==null) {
+            output += currentStack.data.toString() + ', ';//extra for readability
+            currentStack = currentStack.next;
+        }
+        output = output.slice(0, output.length -2);
+        output += ':Bottom of Stack.';
+        console.log(output);
+        return;
     }
-    output = output.slice(0, output.length -2);
-    output += ':Bottom of Stack.';
-    console.log(output);
-    return;
-    }
-    peek(){
-        if(this.top === null){
-            console.log("Empty Stack- no top!");
-            return;
+    peek() {
+        if(this.top === null) {
+            // console.log("Empty Stack- no top!");
+            return null;
         }
         console.log(`Top of Stack:${this.top.data.toString()}`);
-        return;
+        return this.top.data;
     }
     
    
@@ -102,28 +106,126 @@ function main(){
             1+(2 + 3  <---- report location of open (before 2)
             '(1+2) + 3+4) + (5 +6)' <-- report location after 4 ie the )
             ()()()
+            (())
+            (()  or )() or (())) or () () )
             keep track of open/closed parenthese <- location -> node data (stack)
             open/ closed parentheses are the nodes data --> location.   
-            
-        */
+            */
+           for(i= 0; i < mathExpression.length; i++) {
+               if(mathExpression[i] === '(' ){
+                   let newObj = {
+                       parentheses: mathExpression[i], 
+                       location: i 
+                   };
+                   myStack.push(newObj);
+
+               }
+               if(mathExpression[i] === ')') {
+                   let newobj = {
+                       parentheses: mathExpression[i], 
+                       location: i
+                   }
+                //    console.log(myStack.peek())
+                    if(myStack.peek() === null) {
+                        const resultString = `Extra ")" at ${i}`;
+                        myStack.reset(); 
+                        return resultString;
+                    }
+
+                    if(myStack.peek().parentheses.toString() === '(') {
+                        myStack.pop();
+                    }  
+               }
+            }
+
+            if(myStack.peek() !== null ) {
+                const resultString = `Extra "${myStack.top.data.parentheses}" at ${myStack.top.data.location}`;
+                myStack.reset(); 
+                return resultString;
+
+            }
+            else {
+                return "All parentheses have a match!"
+            }
     }
-    function sort(){}
+
+    function sort(stack) {
+        /*
+        takes in 2,6,3,9 and outputs --> 2,3,6,9
+        Create new Stack
+        pops values off initial Stack and pushes them onto new stack.
+            -peeking the value in the new Stack to make sure it is > current value
+                    * 6 > 3 or 6 < 9 or the stack is null 
+                    * if null push value into new Stack 
+                    * if current < value of new stack push onto new stack 
+                    * if current > value of new stack pop peeked value of new stack, push it onto old stack
+                    * peek next value of new stack, if current < value of new stack --> push current onto new stack
+                    * otherwise, repeat steps above. 
+                    
+            -if oldStack === null --> return new Stack 
+        */
+       
+      
+        if(!stack.top) {
+            return "The Stack is Empty!";
+        }
+        let newStack = new Stack(); 
+
+        while(stack.top) {
+            console.log('loop started');
+           let currentValue = stack.peek();
+            if(!newStack.top) { // <--- newStack is empty
+                newStack.push(currentValue); // <---- newStack =6
+            }
+
+            else if(currentValue < newStack.peek()) { // <---- 6 < 9 newStack = 9
+                newStack.push(currentValue); // <---- newStack = 6,9
+            }
+            else if(currentValue > newStack.peek()) { // <---- 6 > 3 
+                stack.push(newStack.pop()); // <---- newStack = ?
+                    if(!newStack.top) {
+                        newStack.push(currentValue); // <--- 6 is newStack
+                    }
+                    else if(currentValue < newStack.peek()) { // <---current value = 6, newStack = 9
+                        newStack.push(currentValue);
+                    }
+            }
+        }
+
+        console.log('loop ended');
+        
+        return newStack;
+}
     
     let myStack = new Stack();
     // myStack.peek();
-    // myStack.push('Kirk');
-    // myStack.push('Spock');
-    // myStack.push('McCoy');
-    // myStack.push('Scotty');
-    // myStack.display();
+    myStack.push('Kirk');
+    myStack.push('Spock');
+    myStack.push('McCoy');
+    myStack.push('Scotty');
+    myStack.display();
     //let test = myStack.pop();
     //console.log(test);
     // myStack.display();
-    // myStack.peek();
+    // console.log(myStack.peek());
     // console.log(isPalindrome("dad"));
     // console.log(isPalindrome("A man, a plan, a canal: Panama"));
     // console.log(isPalindrome("1001"));
     // console.log(isPalindrome("Tauhida"));
+    // console.log(parentheses('()('));
+    // console.log(parentheses('(1+2)(3+4)'));
+    // console.log(parentheses('(4+3(8+9)'));
+    // console.log(parentheses('()()('));
+    // console.log(parentheses('(()())'));
+    // console.log(parentheses('3+2)+4(1+2)+3)'));
+    myStack.push(5);
+    myStack.push(9);
+    myStack.push(1);
+    myStack.push(8);
+    myStack.push(4);
+    myStack.display();
+    const newNew = sort(myStack);
+    newNew.display();
     console.log("done");
 }
 main();
